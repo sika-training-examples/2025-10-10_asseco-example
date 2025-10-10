@@ -12,4 +12,4 @@ fe:
   replicas: 1
   env:
     FONT_COLOR: blue
-    BACKGROUND_COLOR: lightgreen
+    BACKGROUND_COLOR: lightblue
