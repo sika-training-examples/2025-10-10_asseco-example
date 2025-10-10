@@ -9,4 +9,4 @@ be:
     host: counter2-dev-be.k8s.sikademo.com
 
 fe:
-  replicas: 6
+  replicas: 5
