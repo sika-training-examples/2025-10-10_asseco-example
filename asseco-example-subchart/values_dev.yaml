@@ -2,6 +2,7 @@ global:
   host: counter2-dev.k8s.sikademo.com
 
 be:
+  replicas: 4
   env:
     EXTRA_TEXT: subchart v3 (dev)
   ingress:
