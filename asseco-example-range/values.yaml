@@ -14,17 +14,14 @@ deployments:
     image: ghcr.io/ondrejsika/counter
     port: 8000
     env:
-      - name: PORT
-        value: '8000'
-      - name: REDIS
-        value: 'redis'
+      PORT: '8000'
+      REDIS: 'redis'
   fe:
     replicas: 2
     image: ghcr.io/ondrejsika/counter-frontend-go
     port: 3000
     env:
-      - name: API_ORIGIN
-        value: http://be
+      API_ORIGIN: http://be
 
 ingresses:
   fe:

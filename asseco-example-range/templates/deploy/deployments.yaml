@@ -21,8 +21,8 @@ spec:
           ports:
             - containerPort: {{ $deploy.port }}
           env:
-{{ toYaml $deploy.env | indent 12 }}
-{{- if $deploy.extraEnv }}
-{{ toYaml $deploy.extraEnv | indent 12 }}
-{{- end }}
+          {{- range $key, $value := $deploy.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+          {{- end }}
 {{- end }}

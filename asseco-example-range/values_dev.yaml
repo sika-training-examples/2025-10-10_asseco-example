@@ -3,9 +3,8 @@ global:
 
 deployments:
   be:
-    extraEnv:
-      - name: EXTRA_TEXT
-        value: v3 (dev)
+    env:
+      EXTRA_TEXT: v3 (dev)
 
 ingresses:
   be:
