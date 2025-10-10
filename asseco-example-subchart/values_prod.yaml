@@ -3,6 +3,6 @@ global:
 
 be:
   env:
-    EXTRA_TEXT: subchart v3 (prod)
+    EXTRA_TEXT: subchart v6 (prod)
   ingress:
     enabled: false
