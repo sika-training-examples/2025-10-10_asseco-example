@@ -11,8 +11,6 @@ deployments:
     image: ghcr.io/ondrejsika/counter
     port: 8000
     env:
-      - name: EXTRA_TEXT
-        value: v1
       - name: PORT
         value: '8000'
       - name: REDIS

@@ -22,4 +22,7 @@ spec:
             - containerPort: {{ $deploy.port }}
           env:
 {{ toYaml $deploy.env | indent 12 }}
+{{- if $deploy.extraEnv }}
+{{ toYaml $deploy.extraEnv | indent 12 }}
+{{- end }}
 {{- end }}

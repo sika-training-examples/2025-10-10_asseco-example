@@ -1,0 +1,11 @@
+deployments:
+  be:
+    extraEnv:
+      - name: EXTRA_TEXT
+        value: v3 (prod)
+
+ingresses:
+  fe:
+    host: counter-prod.k8s.sikademo.com
+  be:
+    host: counter-prod.k8s.sikademo.com
