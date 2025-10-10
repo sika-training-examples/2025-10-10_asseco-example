@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "name" . }}
+spec:
+  revisionHistoryLimit: 0
+  replicas: {{ include "replicas" . }}
+  selector:
+    matchLabels:
+      app: {{ include "name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "name" . }}
+    spec:
+      containers:
+        - name: main
+          image: {{ .Values.image }}
+          ports:
+            - containerPort: {{ .Values.port }}
+          env:
+          {{- range $key, $value := $.Values.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+          {{- end }}

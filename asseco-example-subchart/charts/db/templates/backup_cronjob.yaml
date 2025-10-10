@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "name" . }}-backup
+spec:
+  # https://crontab.guru/
+  schedule: {{ .Values.backupSchedule | quote }}
+  concurrencyPolicy: {{ .Values.backupConcurrencyPolicy | default "Allow" }}
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          volumes:
+            - name: backups
+              persistentVolumeClaim:
+                claimName: {{ include "name" . }}-backup
+            - name: config
+              configMap:
+                name: {{ include "name" . }}-backup
+          restartPolicy: OnFailure
+          containers:
+            - name: main
+              image: {{ .Values.backupImage }}
+              args:
+                - tergum
+                - backup
+                - -c
+                - /config/tergum.yaml
+              volumeMounts:
+                - name: backups
+                  mountPath: /backups
+                - name: config
+                  mountPath: /config

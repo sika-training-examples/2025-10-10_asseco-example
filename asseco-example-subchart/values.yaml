@@ -1,0 +1,50 @@
+global:
+  host: counter2.k8s.sikademo.com
+
+db:
+  image: redis:8
+  port: 6379
+  storageSize: 1Gi
+  storagePath: /data
+  backupImage: ghcr.io/tergum-extra/redis-with-tergum:tergum-v0.42.0
+  backupSchedule: "* * * * *"
+  backupStorageSize: 1Gi
+  tergum_yaml:
+    Meta:
+      SchemaVersion: 3
+    Telemetry:
+      CollectBackupLog: true
+    Backups:
+      - ID: redis
+        Source:
+          Redis:
+            Host: db
+            Port: 6379
+        Targets:
+          - ID: file
+            File:
+              Dir: /backup
+              Prefix: redis-dump
+              Suffix: rdb
+
+be:
+  enabled: true
+  replicas: 2
+  image: ghcr.io/ondrejsika/counter
+  port: 8000
+  env:
+    PORT: '8000'
+    REDIS: 'db'
+  ingress:
+    enabled: true
+    path: /api
+
+fe:
+  enabled: true
+  replicas: 2
+  image: ghcr.io/ondrejsika/counter-frontend-go
+  port: 3000
+  env:
+    API_ORIGIN: http://be
+  ingress:
+    enabled: true

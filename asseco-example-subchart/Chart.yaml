@@ -1,0 +1,18 @@
+apiVersion: v2
+name: asseco-example-subchart
+description: Example Chart with subcharts
+type: application
+version: 0.0.0
+dependencies:
+- alias: db
+  condition: db.enabled
+  name: db
+  version: 0.0.0
+- alias: be
+  condition: be.enabled
+  name: microservice
+  version: 0.0.0
+- alias: fe
+  condition: be.enabled
+  name: microservice
+  version: 0.0.0

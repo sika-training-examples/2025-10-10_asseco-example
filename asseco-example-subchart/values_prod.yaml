@@ -1,0 +1,8 @@
+global:
+  host: counter2-prod.k8s.sikademo.com
+
+be:
+  env:
+    EXTRA_TEXT: subchart v3 (prod)
+  ingress:
+    enabled: false
