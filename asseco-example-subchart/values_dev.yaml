@@ -10,3 +10,5 @@ be:
 
 fe:
   replicas: 1
+  env:
+    FONT_COLOR: blue
