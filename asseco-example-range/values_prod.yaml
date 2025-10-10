@@ -1,3 +1,6 @@
+global:
+  host: counter-prod.k8s.sikademo.com
+
 deployments:
   be:
     extraEnv:
@@ -5,7 +8,5 @@ deployments:
         value: v3 (prod)
 
 ingresses:
-  fe:
-    host: counter-prod.k8s.sikademo.com
   be:
-    host: counter-prod.k8s.sikademo.com
+    enabled: false

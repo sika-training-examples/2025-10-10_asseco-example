@@ -1,3 +1,6 @@
+global:
+  host: counter.k8s.sikademo.com
+
 statefulsets:
   redis:
     image: redis:8
@@ -25,10 +28,10 @@ deployments:
 
 ingresses:
   fe:
-    host: counter.k8s.sikademo.com
+    enabled: true
     serviceName: fe
   be:
-    host: counter.k8s.sikademo.com
+    enabled: true
     serviceName: be
     path: /api
 

@@ -1,4 +1,5 @@
 {{- range $name, $ing := .Values.ingresses }}
+{{- if $ing.enabled }}
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -10,10 +11,10 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - {{ $ing.host }}
-      secretName: {{ $ing.host }}-tls
+        - {{ $ing.host | default $.Values.global.host }}
+      secretName: {{ $ing.host | default $.Values.global.host }}-tls
   rules:
-    - host: {{ $ing.host }}
+    - host: {{ $ing.host | default $.Values.global.host }}
       http:
         paths:
           - path: {{ $ing.path | default "/" }}
@@ -23,4 +24,5 @@ spec:
                 name: {{ $ing.serviceName }}
                 port:
                   number: 80
+{{- end }}
 {{- end }}
