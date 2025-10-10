@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ include "name" . }}-backup
+  name: {{ .Chart.Name }}-backup
 spec:
   # https://crontab.guru/
   schedule: {{ .Values.backupSchedule | quote }}
@@ -15,10 +15,10 @@ spec:
           volumes:
             - name: backups
               persistentVolumeClaim:
-                claimName: {{ include "name" . }}-backup
+                claimName: {{ .Chart.Name }}-backup
             - name: config
               configMap:
-                name: {{ include "name" . }}-backup
+                name: {{ .Chart.Name }}-backup
           restartPolicy: OnFailure
           containers:
             - name: main

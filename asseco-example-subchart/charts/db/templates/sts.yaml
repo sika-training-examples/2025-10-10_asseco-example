@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "name" . }}
+  name: {{ .Chart.Name }}
 spec:
   volumeClaimTemplates:
     - metadata:
-        name: {{ include "name" . }}
+        name: {{ .Chart.Name }}
       spec:
         accessModes:
           - ReadWriteOnce
@@ -14,16 +14,16 @@ spec:
             storage: {{ .Values.storageSize }}
   selector:
     matchLabels:
-      app: {{ include "name" . }}
+      app: {{ .Chart.Name }}
   template:
     metadata:
       labels:
-        app: {{ include "name" . }}
+        app: {{ .Chart.Name }}
     spec:
       volumes:
-        - name: {{ include "name" . }}
+        - name: {{ .Chart.Name }}
           persistentVolumeClaim:
-            claimName: {{ include "name" . }}
+            claimName: {{ .Chart.Name }}
       containers:
         - name: main
           image: {{ .Values.image }}
@@ -31,4 +31,4 @@ spec:
             - containerPort: {{ .Values.port }}
           volumeMounts:
             - mountPath: {{ .Values.storagePath }}
-              name: {{ include "name" . }}
+              name: {{ .Chart.Name }}
