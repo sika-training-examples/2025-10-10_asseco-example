@@ -24,6 +24,16 @@ spec:
         - name: {{ .Chart.Name }}
           persistentVolumeClaim:
             claimName: {{ .Chart.Name }}
+      initContainers:
+        - name: chown
+          image: busybox
+          command:
+            - sh
+            - -c
+            - chmod 777 -R /data/
+          volumeMounts:
+            - name: {{ .Chart.Name }}
+              mountPath: /data
       containers:
         - name: main
           image: {{ .Values.image }}
