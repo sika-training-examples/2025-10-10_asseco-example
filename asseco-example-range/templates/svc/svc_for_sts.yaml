@@ -1,0 +1,12 @@
+{{- range $name, $sts := .Values.statefulsets }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $name }}
+spec:
+  selector:
+    app: {{ $name }}
+  ports:
+    - port: {{ $sts.port }}
+{{- end }}

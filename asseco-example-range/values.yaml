@@ -1,0 +1,60 @@
+statefulsets:
+  redis:
+    image: redis:8
+    port: 6379
+    storageSize: 1Gi
+    storagePath: /data
+
+deployments:
+  be:
+    replicas: 2
+    image: ghcr.io/ondrejsika/counter
+    port: 8000
+    env:
+      - name: EXTRA_TEXT
+        value: v1
+      - name: PORT
+        value: '8000'
+      - name: REDIS
+        value: 'redis'
+  fe:
+    replicas: 2
+    image: ghcr.io/ondrejsika/counter-frontend-go
+    port: 3000
+    env:
+      - name: API_ORIGIN
+        value: http://be
+
+ingresses:
+  fe:
+    host: counter.k8s.sikademo.com
+    serviceName: fe
+  be:
+    host: counter.k8s.sikademo.com
+    serviceName: be
+    path: /api
+
+pvcs:
+  redis-backup:
+    storageSize: 1Gi
+
+cronjobs:
+  redis-backup:
+    schedule: "*/5 * * * *"
+    image: ghcr.io/tergum-extra/redis-with-tergum:tergum-v0.42.0
+    args:
+      - tergum
+      - backup
+      - -c
+      - /config/tergum.yaml
+    persistentVolumes:
+      redis-backup:
+        mountPath: /backup
+    mountedConfigMaps:
+      redis-backup:
+        mountPath: /config
+
+configmaps:
+  redis-backup:
+    files:
+      - tergum.yaml

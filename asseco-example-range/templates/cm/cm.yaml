@@ -1,0 +1,12 @@
+{{- range $name, $cm := .Values.configmaps }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $name }}
+data:
+  {{- range $file := $cm.files }}
+  {{ $file }}: |-
+{{ $.Files.Get (printf "config/%s" $file) | indent 4 }}
+  {{- end }}
+{{- end }}

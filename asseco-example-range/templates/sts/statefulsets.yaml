@@ -1,0 +1,37 @@
+{{- range $name, $sts := .Values.statefulsets }}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ $name }}
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: {{ $name }}
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: {{ $sts.storageSize }}
+  selector:
+    matchLabels:
+      app: {{ $name }}
+  template:
+    metadata:
+      labels:
+        app: {{ $name }}
+    spec:
+      volumes:
+        - name: {{ $name }}
+          persistentVolumeClaim:
+            claimName: {{ $name }}
+      containers:
+        - name: main
+          image: {{ $sts.image }}
+          ports:
+            - containerPort: {{ $sts.port }}
+          volumeMounts:
+            - mountPath: {{ $sts.storagePath }}
+              name: {{ $name }}
+{{- end }}

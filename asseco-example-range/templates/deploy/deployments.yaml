@@ -1,0 +1,25 @@
+{{- range $name, $deploy := .Values.deployments }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $name }}
+spec:
+  revisionHistoryLimit: 0
+  replicas: {{ $deploy.replicas }}
+  selector:
+    matchLabels:
+      app: {{ $name }}
+  template:
+    metadata:
+      labels:
+        app: {{ $name }}
+    spec:
+      containers:
+        - name: main
+          image: {{ $deploy.image }}
+          ports:
+            - containerPort: {{ $deploy.port }}
+          env:
+{{ toYaml $deploy.env | indent 12 }}
+{{- end }}

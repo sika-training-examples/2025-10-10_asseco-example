@@ -1,0 +1,5 @@
+apiVersion: v2
+name: asseco-example-range
+description: Example Chart for using range in templates
+type: application
+version: 0.0.0

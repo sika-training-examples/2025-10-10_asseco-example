@@ -1,0 +1,16 @@
+Meta:
+  SchemaVersion: 3
+Telemetry:
+  CollectBackupLog: true
+Backups:
+  - ID: redis
+    Source:
+      Redis:
+        Host: redis
+        Port: 6379
+    Targets:
+      - ID: file
+        File:
+          Dir: /backup
+          Prefix: redis-dump
+          Suffix: rdb

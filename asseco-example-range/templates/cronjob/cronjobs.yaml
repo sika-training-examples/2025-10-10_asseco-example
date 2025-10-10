@@ -1,0 +1,42 @@
+{{- range $name, $cj := .Values.cronjobs }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ $name }}
+spec:
+  # https://crontab.guru/
+  schedule: {{ $cj.schedule | quote }}
+  concurrencyPolicy: {{ $cj.concurrencyPolicy | default "Allow" }}
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          volumes:
+            {{- range $name, $volume := $cj.persistentVolumes }}
+            - name: pvc-{{ $name }}
+              persistentVolumeClaim:
+                claimName: {{ $name }}
+            {{- end }}
+            {{- range $name, $cm := $cj.mountedConfigMaps }}
+            - name: cm-{{ $name }}
+              configMap:
+                name: {{ $name }}
+            {{- end }}
+          restartPolicy: OnFailure
+          containers:
+            - name: main
+              image: {{ $cj.image }}
+              args: {{ $cj.args | toJson }}
+              volumeMounts:
+                {{- range $name, $volume := $cj.persistentVolumes }}
+                - name: pvc-{{ $name }}
+                  mountPath: {{ $volume.mountPath }}
+                {{- end }}
+                {{- range $name, $cm := $cj.mountedConfigMaps }}
+                - name: cm-{{ $name }}
+                  mountPath: {{ $cm.mountPath }}
+                {{- end }}
+{{- end }}
